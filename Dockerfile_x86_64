@@ -1,0 +1,31 @@
+ARG ARCH=frommakefile
+ARG DOCKERSRC=frommakefile
+ARG USERNAME=frommakefile
+#
+FROM ${USERNAME}/${DOCKERSRC}:${ARCH}
+#
+ARG PUID=1000
+ARG PGID=1000
+#
+RUN set -xe \
+    && addgroup -g ${PGID} -S alpine \
+    && adduser -u ${PUID} -G alpine -h /home/alpine -D alpine \
+    && apk add --no-cache --purge -uU curl ca-certificates openssh-client git \
+    && VERSION=$(curl -SL https://api.github.com/repos/github/hub/releases/latest | awk '/tag_name/{print $4;exit}' FS='[""]' | sed -e 's_v__') \
+    && echo "Using version: $VERSION" \
+    && curl -o /tmp/hub-linux-amd64-${VERSION}.tgz -SL https://github.com/github/hub/releases/download/v${VERSION}/hub-linux-amd64-${VERSION}.tgz \
+    && tar zxf /tmp/hub-linux-amd64-${VERSION}.tgz -C /usr/local \
+    && ln -s /usr/local/hub-linux-amd64-${VERSION}/bin/hub /usr/local/bin \
+    && echo 'if [ -f /usr/local/hub-linux-amd64-${VERSION}/etc/hub.bash_completion.sh  ]; then . /usr/local/hub-linux-amd64-${VERSION}/etc/hub.bash_completion.sh; fi;' > /etc/bash.bashrc \
+    && chown -R alpine:alpine /usr/local/hub-linux-amd64-${VERSION}/ \
+    && chown -R alpine:alpine /usr/local/bin/hub \
+    && rm -rf /var/cache/apk/* /tmp/*
+#
+VOLUME /home/alpine/
+#
+USER alpine
+WORKDIR /home/alpine/project/
+#
+ENTRYPOINT ["hub"]
+# ENTRYPOINT ["/bin/bash"]
+# ENTRYPOINT ["/init"]
