@@ -36,9 +36,9 @@ BUILDFLAGS := --rm --force-rm --compress -f $(CURDIR)/Dockerfile_$(ARCH) -t $(IM
 	--label org.label-schema.vendor=$(USERNAME)
 
 CACHEFLAGS := --no-cache=true --pull
-MOUNTFLAGS := -v $(CURDIR):/home/alpine/project # mount in dev
+MOUNTFLAGS := # -v $(CURDIR):/home/alpine/project # mount in dev
 NAMEFLAGS  := --name docker_$(CNTNAME) --hostname $(CNTNAME)
-OTHERFLAGS := -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro # -e TZ=Asia/Kolkata
+OTHERFLAGS := # -v /etc/hosts:/etc/hosts:ro -v /etc/localtime:/etc/localtime:ro # -e TZ=Asia/Kolkata
 PORTFLAGS  := #
 PROXYFLAGS := --build-arg http_proxy=$(http_proxy) --build-arg https_proxy=$(https_proxy) --build-arg no_proxy=$(no_proxy)
 
