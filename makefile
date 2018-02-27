@@ -93,7 +93,7 @@ stop :
 
 test : # test armhf on real devices
 	 if [ "$(ARCH)" != "armhf"  ]; then \
-	 	 docker run --rm -it $(NAMEFLAGS) $(RUNFLAGS) $(PORTFLAGS) $(MOUNTFLAGS) $(OTHERFLAGS) --entrypoint sh $(IMAGETAG) -ec "git --version ; hub --version";
+	 	 docker run --rm -it $(NAMEFLAGS) $(RUNFLAGS) $(PORTFLAGS) $(MOUNTFLAGS) $(OTHERFLAGS) --entrypoint sh $(IMAGETAG) -ec "git --version ; hub --version"; \
 	 fi;
 
 # -- }}}
